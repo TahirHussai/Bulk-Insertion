@@ -1,0 +1,147 @@
+﻿@model IEnumerable<BulkInsertion.Models.Product>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.Any())
+{
+    var obj = Model.FirstOrDefault();
+    <div class="row">
+
+        <!-- BOX -->
+        <div class="box border green">
+            <div class="box-title">
+                <h4><i class="fa fa-bar-chart-o"></i>Products Preview</h4>
+
+            </div>
+            <div class="box-body" style="padding-bottom:50px">
+                <div class="col-md-6 col-md-offset-6">
+                    <button class="btn btn-danger pull-right" onclick="CancelPreview()" type="button" style="margin-bottom:11px;margin-left:5px;">Cancel</button>
+                    <button class="btn btn-success pull-right" onclick="SaveData()" type="button" style="margin-bottom:11px">Save</button>
+                </div>
+
+                <table id="example-stats" class="table table-bordered table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th>
+                                #
+                            </th>
+
+                            <th>Product Name</th>
+                            <th>Category Title</th>
+                            <th>Brief Desc</th>
+                            <th>Desc</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @{
+                            int count = 1;
+                        }
+                        @foreach (var item in Model)
+                        {
+
+                            <tr>
+                                <td>
+                                    @count
+                                    <input type="hidden" class="ProductList"
+                                           ProdCategory="@item.ProdCategory"
+                                           Name="@item.Name"
+                                           ProdDescriptions="@item.ProdDescriptions"
+                                           Price="@item.Price"
+                                           />
+                                </td>
+                                <td>@item.Name</td>
+                                <td>@item.ProdCategory</td>
+                                <td>@item.ProdDescriptions</td>
+                                <td>@item.Price</td>
+                              
+                            </tr>
+                            count++;
+                        }
+
+                    </tbody>
+                </table>
+                <div class="col-md-6 col-md-offset-6">
+                    <button class="btn btn-danger pull-right" onclick="CancelPreview()" type="button" style="margin-bottom:11px;margin-left:5px;">Cancel</button>
+                    <button class="btn btn-success pull-right" onclick="SaveData()" type="button" style="margin-bottom:11px">Save</button>
+                </div>
+            </div>
+        </div>
+        <!-- /BOX -->
+    </div>
+}
+else
+{
+    <div class="row">
+        <h4 class="text-center">No Record Found!</h4>
+    </div>
+}
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+
+<script>
+    function CancelPreview() {
+        BindImport();
+    }
+    function SaveData() {
+        var jsonObj = [];
+        $('.ProductList').each(function (i, v) {
+            jsonObj.push({
+                ProdCategory: $(v).attr('ProdCategory'),
+                Name: $(v).attr('Name'),
+                ProductName: $(v).attr('ProductName'),
+                ProdDescriptions: $(v).attr('ProdDescriptions'),
+                Price: $(v).attr('Price'),
+            });
+        });
+
+        var jsonObject = JSON.stringify(jsonObj);
+
+        $.post('../../ImportProducts/SaveData', { jsondata: jsonObject }, function (data) {
+            var url = "../../ImportProducts/Index";
+            window.location.href = url;
+        });
+        //bootbox.confirm({
+        //    title: "<b> <span class='text-warning'> Import Products from excel.</span> </b>",
+        //    message: "<span class='text-danger'> Do you want to save Products? This cannot be undone.</span>",
+        //    buttons: {
+        //        cancel: {
+        //            label: '<i class="fa fa-times"></i> Cancel'
+        //        },
+        //        confirm: {
+        //            label: '<i class="fa fa-check"></i> Save'
+
+        //        }
+        //    },
+        //    //callback: function (result) {
+        //        //if (result) {
+
+        //            var jsonObj = [];
+        //            $('.ProdLists').each(function (i, v) {
+        //                jsonObj.push({
+        //                    CategoryTitle: $(v).attr('CategoryTitle'),
+        //                    BrandName: $(v).attr('BrandName'),
+        //                    ProductName: $(v).attr('ProductName'),
+        //                    BriefDescription: $(v).attr('BriefDescription'),
+        //                    ProductDescription: $(v).attr('ProductDescription'),
+        //                    Price: $(v).attr('Price'),
+        //                    Discount: $(v).attr('Discount'),
+        //                });
+        //            });
+
+        //            var jsonObject = JSON.stringify(jsonObj);
+
+        //            $.post('../../ImportProducts/SaveProducts', { jsondata: jsonObject }, function (data) {
+        //                var url = "../../ImportProducts/DataStatus";
+        //                window.location.href = url;
+        //            });
+        //        //} else {
+        //        //    BindImport();
+        //        //}
+        //    //}
+        //});
+    }
+
+</script>

@@ -1,0 +1,5 @@
+1-Install Nuget Packages for Import data from excel file 
+  write below lines in Console Package .
+	Install-Package EPPlus -Version 4.5.2.1
+Note:	above version required Licence 
+	To Uninstall Any Package Type "Uninstall-Package"Instead of "Install-Package" 

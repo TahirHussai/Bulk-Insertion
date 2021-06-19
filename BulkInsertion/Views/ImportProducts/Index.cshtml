@@ -1,0 +1,68 @@
+﻿@model IEnumerable<BulkInsertion.Models.Product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+   
+    <!-- BOX -->
+    <div class="box border primary">
+        <div class="box-title">
+            <h4><i class="fa fa-table"></i>Product List</h4>
+           
+                <a href="~/ImportProducts/ImportData" data-toggle="modal" class="config">
+                    <i class="fa fa-plus" data-toggle="tooltip" title="Import Products">Import Products</i>
+                </a>
+
+
+               
+           
+        </div>
+        <div class="row text-center">
+            @if (TempData["Success"] != null)
+            {
+                <span class="alert alert-success">@TempData["Success"].ToString()</span>
+            }
+            @if (TempData["Error"] != null)
+            {
+                <span class="alert alert-danger">@TempData["Error"].ToString()</span>
+            }
+        </div>
+        <div class="row" style="height:20px"></div>
+        <div class="box-body">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Product Description</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ 
+                        int cnt = 1;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@cnt</td>
+                            <td>@item.Name</td>
+                            <td>@item.ProdCategory</td>
+                            <td>@item.ProdDescriptions</td>
+                            <td>@item.Price</td>
+                        </tr>
+                        cnt++;
+                    }
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+    <!-- /BOX -->
+</div>

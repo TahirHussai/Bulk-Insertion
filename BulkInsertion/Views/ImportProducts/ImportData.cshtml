@@ -1,0 +1,111 @@
+﻿
+@{
+    ViewBag.Title = "ImportData";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="row">
+
+    <div class="box border green">
+        <div class="box-title">
+            <h4><i class="fa fa-bars"></i> Import Products</h4>
+
+        </div>
+        <div class="box-body big">
+
+            <div class="panel panel-primary" data-collapsed="0">
+                <div class="panel-body">
+                    <div style="margin-top:40px">
+                        @using (Html.BeginForm("PreviewData", "ImportProducts", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <fieldset class="scheduler-border">
+                                <legend class="scheduler-border">Import Products</legend>
+                                <div id="boxSentToContact">
+
+                                    <div class="col-md-6">
+         
+                                        <strong><a href="~/ImportProductXLS.xlsx">Download Excel Click  Here</a></strong>
+                                        <p style="color:#ac1818">Please Upload .xlsx File!</p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="input-file-container">
+                                            <input class="input-file" id="ExternalFile" name="ExternalFile" type="file" accept=".xlsx" required>
+                                            <label tabindex="0" for="my-file" class="input-file-trigger">Upload  file...</label>
+                                        </div>
+                                        <p class="file-return"></p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-md-offset-6">
+                                    <button class="btn btn-success pull-right" type="submit" style="margin-top:20px">Preview Data  </button>
+                                </div>
+                            </fieldset>
+                        }
+
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    //file uploader frontend text formating
+    document.querySelector("html").classList.add("js");
+
+    var fileInput = document.querySelector(".input-file"),
+        button = document.querySelector(".input-file-trigger"),
+        the_return = document.querySelector(".file-return");
+
+    button.addEventListener("keydown", function (event) {
+        if (event.keyCode == 13 || event.keyCode == 32) {
+            fileInput.focus();
+        }
+    });
+    button.addEventListener("click", function (event) {
+        fileInput.focus();
+        return false;
+    });
+    fileInput.addEventListener("change", function (event) {
+        the_return.innerHTML = this.value;
+    });
+</script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+<script>
+    $("#PreviewData").unbind("submit").bind("submit", function (e) {
+        debugger;
+        e.preventDefault();
+        var form = $(this);
+        if (form.valid()) {
+            var formData = new FormData(form[0]);
+            debugger;
+            App.blockUI($("#box"));
+            $.ajax({
+                type: "POST",
+                url: $(form).prop("action"),
+                data: formData,
+                contentType: false,
+                processData: false,
+                error: function (err) {
+                    alert(err);
+                    App.unblockUI($("#box"));
+
+                },
+                success: function (res) {
+                    $("#preview").html(res);
+                    App.unblockUI($("#box"));
+
+                }
+            });
+        }
+    });
+
+</script>
+
+
